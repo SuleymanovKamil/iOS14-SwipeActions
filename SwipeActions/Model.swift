@@ -19,7 +19,7 @@ struct SwipeItem: Identifiable{
         image: @escaping () -> Image? = { nil },
         label : @escaping () -> Text? = { nil },
         action: @escaping () -> Void,
-        itemWidth : CGFloat = 60,
+        itemWidth : CGFloat = 80,
         itemColor: Color
     ) {
         self.image = image

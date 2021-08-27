@@ -8,57 +8,23 @@
 import SwiftUI
 
 struct SwipeActions: ViewModifier {
-    
-    enum SwipeSide {
-        case leftSwipe
-        case rightSwipe
-    }
-    
-    private var contentOffset: CGFloat {
-        switch swipeDirection {
-        case .leftSwipe:
-            return swipeItemWidth
-        case .rightSwipe:
-            return -swipeItemWidth
-        }
-    }
-    
-    private var swipeItemOffset: CGFloat {
-        switch swipeDirection {
-        case .leftSwipe:
-            return swipeItemWidth - totalSwipeItemWidth
-        case .rightSwipe:
-            return totalSwipeItemWidth - swipeItemWidth
-        }
-    }
-    
-    private var zStackAlignment: Alignment {
-        switch swipeDirection {
-        case .leftSwipe:
-            return .leading
-        case .rightSwipe:
-            return .trailing
-        }
-    }
-    
-    @State var swipeItemWidth: CGFloat = 0
-    
-    private func optWidth(value: CGFloat) -> CGFloat {
-        return min(abs(value), totalSwipeItemWidth)
-    }
-    
-    private var totalSwipeItemWidth: CGFloat {
-        return swipeItems.map { $0.itemWidth}.reduce(0, +)
-    }
-    
-    private var swipeItems: [SwipeItem] {
-        swipeDirection == .leftSwipe ? leadingSwipeItems : trailingSwipeitems
-    }
-    
-    @State private var swipeDirection: SwipeSide = SwipeSide.leftSwipe
     private var leadingSwipeItems: [SwipeItem]
     private var trailingSwipeitems: [SwipeItem]
     private var rowHeight: CGFloat
+    
+    @State private var horizontalOffset: CGFloat = 0
+    @State private var contentOffset: CGFloat = 0
+    
+    @State private var isLeftSwipe = false
+    @State private var isRightSwipe = false
+    
+    let screenWidth = UIScreen.main.bounds.width
+    private  var contentOffsetOnSwipe: CGFloat { screenWidth / 3 }
+    private var swipeRecognitionValue: CGFloat { screenWidth / 15 }
+    
+    private func totalSwipeItemWidth (for array: [SwipeItem]) -> CGFloat {
+        return array.map { $0.itemWidth}.reduce(0, +)
+    }
     
     init(leading: [SwipeItem], trailing: [SwipeItem], rowHeight: CGFloat ) {
         leadingSwipeItems = leading
@@ -66,62 +32,32 @@ struct SwipeActions: ViewModifier {
         self.rowHeight = rowHeight
     }
     
-    private func resetOffsetState() {
-        withAnimation {
-            swipeItemWidth = 0
-        }
-    }
-    
     func body(content: Content) -> some View {
         
         ZStack {
             GeometryReader { geo in
-                HStack{
+                HStack {
+                    
+                    swipeItemView(swipeItems: leadingSwipeItems,
+                                  height: rowHeight,
+                                  horizontalOffset: $horizontalOffset)
+                      
                     content
-                        .frame(height: rowHeight)
                         .frame(width: geo.size.width)
-                        .background(Color.red)
-                        .offset(x: contentOffset)
+                        .zIndex(0)
                     
                     
-                    swipeItemView
-                        .offset(x: -swipeItemOffset)
-                        .frame(width: totalSwipeItemWidth)
-                        .zIndex(1)
+                    swipeItemView(swipeItems: trailingSwipeitems,
+                                  height: rowHeight,
+                                  horizontalOffset: $horizontalOffset)
                 }
             }
-            
+            .offset(x: -totalSwipeItemWidth(for: leadingSwipeItems) + horizontalOffset)
+            .frame(height: rowHeight)
+            .contentShape(Rectangle())
+            .gesture(dragGesture)
+            .clipped()
         }
-        .frame(height: rowHeight)
-        .clipShape(Rectangle())
-        .gesture(dragGesture)
-        .clipped()
-    }
-    
- 
-    private var swipeItemView: some View {
-        HStack(spacing: 0) {
-            ForEach(swipeItems) { swipeItem in
-                VStack(spacing: 10) {
-                    Spacer() // To extend top edge
-                    
-                    swipeItem.image()
-                        .font(.title2)
-                    
-                    swipeItem.label()
-                    
-                    
-                    Spacer() // To extend bottom edge
-                }
-                .frame(width: swipeItem.itemWidth)
-                .background(swipeItem.itemColor)
-                .onTapGesture {
-                    swipeItem.action()
-                    resetOffsetState()
-                }
-            }
-        }
-        .frame(height: rowHeight)
         
     }
     
@@ -130,28 +66,50 @@ struct SwipeActions: ViewModifier {
             .onChanged { value in
                 
                 withAnimation {
-                    if value.translation.width > 0 && contentOffset < 0 {
-                        swipeDirection = .leftSwipe
-                    } else {
-                        swipeDirection = .rightSwipe
+                    
+                    if !leadingSwipeItems.isEmpty && value.translation.width > 0{
+                    horizontalOffset = contentOffset + value.translation.width
                     }
-
-                    swipeItemWidth =  optWidth(value: value.translation.width)
+                    
+                    if !trailingSwipeitems.isEmpty && value.translation.width < 0 {
+                    horizontalOffset = contentOffset + value.translation.width
+                    }
+                    
+                    if contentOffset > 0 {
+                        isLeftSwipe = horizontalOffset > contentOffsetOnSwipe - swipeRecognitionValue
+                    } else {
+                        isLeftSwipe = horizontalOffset > swipeRecognitionValue
+                    }
+                    
+                    if contentOffset < 0 {
+                        isRightSwipe = horizontalOffset < -contentOffsetOnSwipe + swipeRecognitionValue
+                    } else {
+                        isRightSwipe = horizontalOffset < -swipeRecognitionValue
+                    }
+                    
+                    if abs(horizontalOffset) > contentOffsetOnSwipe {
+                        if isLeftSwipe  {
+                            horizontalOffset = contentOffsetOnSwipe
+                        } else if isRightSwipe  {
+                            horizontalOffset = -contentOffsetOnSwipe
+                        }
+                    }
                 }
             }
             .onEnded { value in
                 withAnimation {
-                    if swipeItemWidth < (totalSwipeItemWidth / 2) {
-                        swipeItemWidth = 0
+                    if isRightSwipe {
+                        contentOffset = -totalSwipeItemWidth(for: trailingSwipeitems) - CGFloat(trailingSwipeitems.count * 5)
+                    } else if isLeftSwipe {
+                        contentOffset = totalSwipeItemWidth(for: leadingSwipeItems)
                     } else {
-                        swipeItemWidth = totalSwipeItemWidth
+                        contentOffset = 0
                     }
+                    horizontalOffset = contentOffset
                 }
             }
     }
-    
 }
-
 
 extension View {
     func swipeAction(leading: [SwipeItem] = [], trailing: [SwipeItem] = [], rowHeight: CGFloat) -> some View {
@@ -164,3 +122,6 @@ struct SwipeItemModifier_Previews: PreviewProvider {
         ContentView()
     }
 }
+
+
+
