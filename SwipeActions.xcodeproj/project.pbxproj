@@ -13,7 +13,7 @@
 		6B128ECD26D7BAF900B1A075 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B128ECC26D7BAF900B1A075 /* Preview Assets.xcassets */; };
 		6BF8DD5626D8C7C4008AB6DF /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF8DD5526D8C7C4008AB6DF /* Model.swift */; };
 		6BF8DD5826D917D3008AB6DF /* SwipeItemModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF8DD5726D917D3008AB6DF /* SwipeItemModifier.swift */; };
-		6BF8DD5C26D98FA3008AB6DF /* swipeItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF8DD5B26D98FA3008AB6DF /* swipeItemView.swift */; };
+		6BF8DD5C26D98FA3008AB6DF /* SwipeItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF8DD5B26D98FA3008AB6DF /* SwipeItemView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +25,7 @@
 		6B128ECE26D7BAF900B1A075 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6BF8DD5526D8C7C4008AB6DF /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		6BF8DD5726D917D3008AB6DF /* SwipeItemModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeItemModifier.swift; sourceTree = "<group>"; };
-		6BF8DD5B26D98FA3008AB6DF /* swipeItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swipeItemView.swift; sourceTree = "<group>"; };
+		6BF8DD5B26D98FA3008AB6DF /* SwipeItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeItemView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,11 +58,11 @@
 		6B128EC426D7BAF300B1A075 /* SwipeActions */ = {
 			isa = PBXGroup;
 			children = (
-				6B128EC526D7BAF300B1A075 /* SwipeActionsApp.swift */,
 				6B128EC726D7BAF300B1A075 /* ContentView.swift */,
-				6BF8DD5B26D98FA3008AB6DF /* swipeItemView.swift */,
+				6BF8DD5B26D98FA3008AB6DF /* SwipeItemView.swift */,
 				6BF8DD5726D917D3008AB6DF /* SwipeItemModifier.swift */,
 				6BF8DD5526D8C7C4008AB6DF /* Model.swift */,
+				6B128EC526D7BAF300B1A075 /* SwipeActionsApp.swift */,
 				6B128EC926D7BAF800B1A075 /* Assets.xcassets */,
 				6B128ECE26D7BAF900B1A075 /* Info.plist */,
 				6B128ECB26D7BAF900B1A075 /* Preview Content */,
@@ -149,7 +149,7 @@
 			files = (
 				6B128EC826D7BAF300B1A075 /* ContentView.swift in Sources */,
 				6B128EC626D7BAF300B1A075 /* SwipeActionsApp.swift in Sources */,
-				6BF8DD5C26D98FA3008AB6DF /* swipeItemView.swift in Sources */,
+				6BF8DD5C26D98FA3008AB6DF /* SwipeItemView.swift in Sources */,
 				6BF8DD5626D8C7C4008AB6DF /* Model.swift in Sources */,
 				6BF8DD5826D917D3008AB6DF /* SwipeItemModifier.swift in Sources */,
 			);

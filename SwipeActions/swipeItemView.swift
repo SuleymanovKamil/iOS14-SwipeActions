@@ -7,18 +7,25 @@
 
 import SwiftUI
 
-struct swipeItemView: View{
+struct SwipeItemView: View{
+    
     var swipeItems: [SwipeItem]
-    var height: CGFloat
+    var swipeItemsHeight: CGFloat
     @Binding var horizontalOffset: CGFloat
+    
     var body: some View{
         HStack(spacing: 0) {
             ForEach(swipeItems) { swipeItem in
                 VStack(spacing: 10) {
                     Spacer()
                     
-                    swipeItem.image()
-                        .font(.title2)
+                    if swipeItem.image() != nil{
+                        swipeItem.image()!
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: swipeItem.itemWidth / 3)
+                            
+                    }
                     
                     swipeItem.label()
                     
@@ -34,8 +41,7 @@ struct swipeItemView: View{
                 }
             }
         }
-        .frame(height: height)
-        .zIndex(1)
-        .clipped()
+        .frame(height: swipeItemsHeight)
+      
     }
 }

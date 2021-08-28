@@ -8,81 +8,63 @@
 import SwiftUI
 
 struct ContentView: View {
-  
     var body: some View {
         
         List {
-         
-                Text("1")
-            .swipeAction(trailing:
-        [SwipeItem(label: {
-                Text("Play")
-            }, action: {
-                print("Play")
-            }, itemWidth: 80
-            , itemColor: .yellow)], rowHeight: 40)
+            VStack {
+                Text("Trailing action")
+                .swipeAction(trailing: [SwipeItem(
+                                            label: { Text("Action")},
+                                            action: { print("Action") },
+                                            itemWidth: 80,
+                                            itemColor: .yellow)],
+                         rowHeight: 40)
+            }
             
-            
-            Text("2")
+            Text("Both sides actions")
                 .swipeAction(leading: swipeItems, trailing: swipeItems2, rowHeight: 80)
             
-            Text("3")
-        .swipeAction(leading:
-    [SwipeItem(label: {
-            Text("Play")
-        }, action: {
-            print("Play")
-        }, itemWidth: 80
-        , itemColor: .yellow)], rowHeight: 40)
-            
+            Text("Leading actions")
+                .swipeAction(leading: [SwipeItem(
+                                        label: { Text("Play")},
+                                        action: { print("Play")},
+                                        itemWidth: 80,
+                                        itemColor: .yellow)],
+                                        rowHeight: 40)
         }
-        .padding(.horizontal, -20)
+        .padding(.horizontal, -20) //to remove list horizontal padding, or need to use ForEach with .listRowInsets(EdgeInsets())
     }
     
-    var swipeItems = [
-        SwipeItem(image: {
-            Image(systemName: "play")
-        }, label: {
-            Text("Play")
-        }, action: {
-            print("Play")
-        }, itemWidth: 80
-        , itemColor: .yellow),
     
+    var swipeItems = [
+        SwipeItem(image: { Image(systemName: "play")},
+                  label: { Text("Play") },
+                  action: { print("Play")},
+                  itemWidth: 80 ,
+                  itemColor: .yellow),
         
-        SwipeItem(label: {
-            Text("Pause")
-        }, action: {
-            print("Pause")
-        }, itemColor: .blue),
+        SwipeItem(label: { Text("Pause")},
+                  action: { print("Pause") },
+                  itemColor: .blue),
         
         SwipeItem(image: {
-            Image(systemName: "play")
-        }, label: {
-            Text("Play")
-        }, action: {
-            print("Play")
-        }, itemColor: .purple)
-    ]
+            Image("whatsappIcon")},
+                  label: { Text("Whatsapp")
+                            .font(.caption)
+                            .foregroundColor(.white)},
+                  action: { print("Whatsapp")},
+                  itemColor: .green) ]
     
     var swipeItems2 = [
-        SwipeItem(image: {
-            Image(systemName: "play")
-        }, label: {
-            Text("Play")
-        }, action: {
-            print("Play")
-        }, itemColor: .blue),
+        SwipeItem(image: { Image(systemName: "pencil.circle.fill")},
+                  label: { Text("Edit") },
+                  action: { print("Edit")},
+                  itemColor: .yellow),
         
-        SwipeItem(label: {
-            Text("Pause")
-        }, action: {
-            print("Pause")
-        }, itemColor: .gray),
-        
-       
-    ]
-    
+        SwipeItem(image: { Image(systemName: "trash.circle.fill").renderingMode(.original)},
+                  label: { Text("Delete").foregroundColor(.white).font(.caption2) },
+                  action: { print("Delete") },
+                  itemColor: .red), ]
 }
 
 struct ContentView_Previews: PreviewProvider {
